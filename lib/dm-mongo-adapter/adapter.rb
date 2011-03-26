@@ -159,11 +159,11 @@ module DataMapper
       # @api private
       def attributes_as_fields(record)
         attributes = case record
-          when DataMapper::Resource
-            attributes_from_resource(record)
-          when Hash
-            attributes_from_properties_hash(record)
-          end
+                     when DataMapper::Resource
+                       attributes_from_resource(record)
+                     when ::Hash
+                       attributes_from_properties_hash(record)
+                     end
 
         attributes.delete('_id') unless attributes.nil?
 
@@ -177,7 +177,11 @@ module DataMapper
         model = record.model
 
         model.properties.each do |property|
-          attributes[property.field] = dump_field_value(property.dump(property.get(record)))
+          attributes[property.field] = if property.kind_of?(DataMapper::Property::EmbeddedValue)
+                                         attributes_from_resource(property.get(record))
+                                       else
+                                         dump_field_value(property.dump(property.get(record)))
+                                       end
         end
 
         attributes
