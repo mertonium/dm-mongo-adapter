@@ -9,7 +9,7 @@ group :runtime do
   # DataMapper libs
   DM_VERSION = '~> 1.1.0'
 
-  gem 'dm-core',       DM_VERSION
+  gem 'dm-core',       DM_VERSION, :git => "git://github.com/datamapper/dm-core.git", :branch => "embedded_value"
   gem 'dm-aggregates', DM_VERSION
   gem 'dm-migrations', DM_VERSION
 end
