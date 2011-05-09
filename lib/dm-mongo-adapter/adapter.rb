@@ -248,9 +248,9 @@ module DataMapper
         unless defined?(@database)
           @database = connection.db(@options[:database])
 
-          if @options[:username]
+          if @options[:user]
             begin
-              @database.authenticate(@options[:username], @options[:password])
+              @database.authenticate(@options[:user], @options[:password])
             rescue ::Mongo::AuthenticationError
               raise ConnectionError,
                 'MongoDB did not recognize the given username and/or ' \
