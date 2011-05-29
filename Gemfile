@@ -1,28 +1,45 @@
+require 'pathname'
+
 source 'http://rubygems.org'
 
+SOURCE        = ENV.fetch('SOURCE', :git).to_sym
+REPO_POSTFIX  = SOURCE == :path ? ''                                : '.git'
+DATAMAPPER    = SOURCE == :path ? Pathname(__FILE__).dirname.parent : 'http://github.com/datamapper'
+DM_VERSION    = '~> 1.1.1'
+MONGO_VERSION = '~> 1.2.4'
+
 group :runtime do
-  MONGO_VERSION = '~> 1.2.4'
 
   # MongoDB driver
   gem 'bson_ext', :platforms => [ :mri ]
   gem 'mongo', MONGO_VERSION
+end
 
-  # DataMapper libs
-  DM_VERSION = '~> 1.1.0'
+group :datamapper do
 
-  gem 'dm-core',       DM_VERSION
-  gem 'dm-aggregates', DM_VERSION
-  gem 'dm-migrations', DM_VERSION
+  gem 'dm-core',      DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-core#{REPO_POSTFIX}"
+
+  plugins = ENV['PLUGINS'] || ENV['PLUGIN']
+  plugins = plugins.to_s.tr(',', ' ').split.push('dm-migrations').push('dm-aggregates').uniq
+
+  plugins.each do |plugin|
+    gem plugin, DM_VERSION, SOURCE => "#{DATAMAPPER}/#{plugin}#{REPO_POSTFIX}"
+  end
 end
 
 group :development do
-  gem 'rake'
-  gem 'rcov',    '~> 0.9.9', :platforms => [ :mri_18 ]
-  gem 'rspec',   '~> 1.3'
-  gem 'jeweler', '~> 1.5.1'
-  gem 'yard',    '~> 0.5'
+
+  gem 'dm-migrations', DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-migrations#{REPO_POSTFIX}"
+  gem 'jeweler',       '~> 1.5.2'
+  gem 'rake',          '~> 0.8.7'
+  gem 'rspec',         '~> 1.3.1'
 end
 
-group :quality do
-  gem 'yardstick', '~> 0.1'
+platforms :mri_18 do
+  group :quality do
+    gem 'rcov',      '~> 0.9.9'
+    gem 'yard',      '~> 0.6'
+    gem 'yardstick', '~> 0.2'
+  end
 end
+
