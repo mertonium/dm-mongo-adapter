@@ -10,7 +10,30 @@ module DataMapper
       # @see http://www.mongodb.org/display/DOCS/DB+Ref
       #
       # @api public
-      class DBRef < DataMapper::Mongo::Property::ObjectId
+      class DBRef < DataMapper::Property::Object
+        include DataMapper::Property::PassThroughLoadDump
+
+        primitive ::BSON::ObjectId
+        required false
+
+        # Returns the ObjectId as a string
+        #
+        # @return [String]
+        #
+        # @api semipublic
+        def typecast_to_primitive(value)
+          case value
+          when ::String
+            ::BSON::ObjectId.from_string(value)
+          else
+            raise ArgumentError.new('+value+ must String')
+          end
+        end
+
+        # @api semipublic
+        def valid?(value, negated = false)
+          value.nil? || primitive?(value)
+        end
       end # DBRef
     end # Property
   end # Mongo

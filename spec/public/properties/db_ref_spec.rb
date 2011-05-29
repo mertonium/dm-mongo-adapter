@@ -13,5 +13,14 @@ describe DataMapper::Mongo::Property::DBRef do
     @property       = User.properties[:group_id]
   end
 
+  it 'should set default field to property name' do
+    @property.field.should == 'group_id'
+  end
+
+  it 'should not default to be a key' do
+    @property.key?.should be_false
+  end
+
   it_should_behave_like 'An ObjectId Type'
+
 end
