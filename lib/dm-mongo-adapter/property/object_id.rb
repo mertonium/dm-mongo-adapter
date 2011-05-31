@@ -14,33 +14,9 @@ module DataMapper
       # @see http://www.mongodb.org/display/DOCS/Object+IDs
       #
       # @api public
-      class ObjectId < DataMapper::Property::Object
-        include DataMapper::Property::PassThroughLoadDump
-
-        primitive ::BSON::ObjectId
+      class ObjectId < DBRef
         key true
-        field "_id"
-        required false
-
-        # Returns the ObjectId as a string
-        #
-        # @return [String]
-        #
-        # @api semipublic
-        def typecast_to_primitive(value)
-          case value
-          when ::String
-            ::BSON::ObjectId.from_string(value)
-          else
-            raise ArgumentError.new('+value+ must String')
-          end
-        end
-
-        # @api semipublic
-        def valid?(value, negated = false)
-          value.nil? || primitive?(value)
-        end
-
+        field '_id'
       end # ObjectId
     end # Property
   end # Mongo
