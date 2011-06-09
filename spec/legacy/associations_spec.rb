@@ -8,7 +8,7 @@ describe "associations" do
       include DataMapper::Mongo::Resource
 
       property :id, ObjectId
-      property :group_id, DBRef
+      property :group_id, ForeignObjectId
       property :name, String
       property :age, Integer
     end

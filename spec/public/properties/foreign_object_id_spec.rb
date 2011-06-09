@@ -1,15 +1,15 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'spec_helper'))
 
-describe DataMapper::Mongo::Property::DBRef do
+describe DataMapper::Mongo::Property::ForeignObjectId do
   before(:all) do
     class User
       include DataMapper::Mongo::Resource
 
       property :id,       ObjectId
-      property :group_id, DBRef
+      property :group_id, ForeignObjectId
     end
 
-    @property_class = DataMapper::Mongo::Property::DBRef
+    @property_class = DataMapper::Mongo::Property::ForeignObjectId
     @property       = User.properties[:group_id]
   end
 
@@ -22,5 +22,4 @@ describe DataMapper::Mongo::Property::DBRef do
   end
 
   it_should_behave_like 'An ObjectId Type'
-
 end

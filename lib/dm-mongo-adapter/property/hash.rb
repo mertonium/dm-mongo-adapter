@@ -1,6 +1,6 @@
 module DataMapper
   module Mongo
-    class Property
+    module Property
       class Hash < DataMapper::Property::Object
         include DataMapper::Property::PassThroughLoadDump
         primitive ::Hash
