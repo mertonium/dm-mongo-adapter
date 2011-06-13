@@ -11,4 +11,10 @@ describe DataMapper::Mongo::Property::ObjectId do
       property.to_child_key.should == DataMapper::Mongo::Property::ForeignObjectId
     end
   end
+
+  describe '#required' do
+    it 'should not be required' do
+      property.required.should be_false
+    end
+  end
 end

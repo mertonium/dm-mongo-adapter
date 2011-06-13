@@ -19,6 +19,7 @@ module DataMapper
         primitive ::BSON::ObjectId
         key true
         field '_id'
+        required false
 
         # @api private
         def to_child_key
