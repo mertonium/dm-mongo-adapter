@@ -10,17 +10,17 @@ module DataMapper::Mongo::Spec
     def cleanup_models(*models)
       unless models.empty?
         model = models.pop
-        sym   = model.to_s.to_sym
+        name = model.name
 
-        if Object.const_defined?(sym)
-          if model.respond_to?(:storage_name)
-            db = DataMapper::Mongo::Spec.database(model.repository.name)
-            db.drop_collection(model.storage_name)
-          end
+        if model.respond_to?(:storage_name)
+          db = DataMapper::Mongo::Spec.database(model.repository.name)
+          db.drop_collection(model.storage_name)
+        end
 
-          DataMapper::Model.descendants.delete(model)
+        DataMapper::Model.descendants.delete(model)
 
-          Object.send(:remove_const, sym)
+        if name && Object.const_defined?(name)
+          Object.send(:remove_const, name)
         end
 
         cleanup_models(*models)
