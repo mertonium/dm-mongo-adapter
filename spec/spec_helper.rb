@@ -6,7 +6,8 @@ $LOAD_PATH.unshift(MONGO_SPEC_ROOT.parent.join('lib').to_s)
 
 require 'dm-mongo-adapter'
 
-Pathname.glob((MONGO_SPEC_ROOT + '{lib,*/shared}/**/*.rb').to_s).each { |file| require file }
+Pathname.glob((MONGO_SPEC_ROOT + 'lib/**/*.rb').to_s).each { |file| require file }
+Pathname.glob((MONGO_SPEC_ROOT + '**/shared/**/*.rb').to_s).each { |file| require file }
 
 # Define the repositories used by the specs. Override the defaults by
 # supplying ENV['DEFAULT_SPEC_URI'] or ENV['AUTH_SPEC_URI'].
