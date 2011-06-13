@@ -2,8 +2,6 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 
 describe DataMapper, 'associations' do
   before :all do
-    cleanup_models :User, :Group
-
     class ::User
       include DataMapper::Mongo::Resource
 
