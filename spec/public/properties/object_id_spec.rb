@@ -11,9 +11,5 @@ describe DataMapper::Mongo::Property::ObjectId do
     @property       = User.properties[:id]
   end
 
-  it 'should have ForeignObjectId as #child_key' do
-    @property.child_key.should == DataMapper::Mongo::Property::ForeignObjectId
-  end
-
   it_should_behave_like 'An ObjectId Type'
 end

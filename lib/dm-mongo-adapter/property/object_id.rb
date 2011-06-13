@@ -19,12 +19,12 @@ module DataMapper
         primitive ::BSON::ObjectId
         key true
         field '_id'
-      end # ObjectId
 
-      # @api private
-      def to_child_key
-        ForeignObjectId
-      end
+        # @api private
+        def to_child_key
+          ForeignObjectId
+        end
+      end # ObjectId
     end # Property
   end # Mongo
 end # DataMapper
