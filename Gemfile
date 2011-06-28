@@ -6,18 +6,18 @@ SOURCE        = ENV.fetch('SOURCE', :git).to_sym
 REPO_POSTFIX  = SOURCE == :path ? ''                                : '.git'
 DATAMAPPER    = SOURCE == :path ? Pathname(__FILE__).dirname.parent : 'http://github.com/datamapper'
 DM_VERSION    = '~> 1.1.1'
-MONGO_VERSION = '~> 1.2.4'
+MONGO_VERSION = '~> 1.3.1'
 
 group :runtime do
 
   # MongoDB driver
-  gem 'bson_ext', :platforms => [ :mri ]
-  gem 'mongo', MONGO_VERSION
+  gem 'bson_ext', MONGO_VERSION, :platforms => [ :mri ]
+  gem 'mongo',    MONGO_VERSION
 end
 
 group :datamapper do
 
-  gem 'dm-core',      DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-core#{REPO_POSTFIX}"
+  gem 'dm-core', DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-core#{REPO_POSTFIX}"
 
   plugins = ENV['PLUGINS'] || ENV['PLUGIN']
   plugins = plugins.to_s.tr(',', ' ').split.push('dm-migrations').push('dm-aggregates').uniq
