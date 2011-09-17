@@ -33,10 +33,4 @@ Spec::Runner.configure do |config|
     models  = DataMapper::Model.descendants.to_a
     cleanup_models(*models)
   end
-
-  config.after(:suite) do
-    # Close all the raw connections
-    DataMapper::Mongo::Spec.database(:default).connection.close
-    DataMapper::Mongo::Spec.database(:auth).connection.close
-  end
 end
