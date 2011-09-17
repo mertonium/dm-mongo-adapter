@@ -297,10 +297,9 @@ module DataMapper
 
       # Returns the Mongo::Connection instance for this process
       #
-      # @todo Reconnect if the connection has timed out, or if the process has
-      #       been forked.
+      # @todo If the process has been forked.
       #
-      # @return [Mongo::Connection]
+      # @return [Mongo::Connection|Mongo::ReplSetConnection]
       #
       # @api semipublic
       def connection
