@@ -118,6 +118,11 @@ module DataMapper
           options[:database] = options[:path].sub(/^\//, '')
         end
 
+        default_port = options[:port] || 27017
+        options[:seeds].map! do |host,port|
+          [host,port || default_port]
+        end if options.key? :seeds
+
         super
       end
 
@@ -227,10 +232,38 @@ module DataMapper
       # @api private
       def with_collection(model)
         begin
-          yield database.collection(model.storage_name(name))
+          with_connection_management do
+            yield database.collection(model.storage_name(name))
+          end
         rescue Exception => exception
           DataMapper.logger.error(exception.to_s)
           raise exception
+        end
+      end
+
+      # Runs the given block with connection managment
+      #
+      # Will reconnect to databases in in case of connection failure.
+      # The amount of retries can be controlled using the 
+      # :connection_retries option.
+      # Then the amount of retries is not present or set to zero no 
+      # connection retry will be done.
+      #
+      # Be aware this method can execute the block serveral times. 
+      # Side effects can occur!
+      #
+      # @api private
+
+      def with_connection_management
+        max_retries = @options[:connection_retries] || 0
+        retries = 0
+        begin
+          yield
+        rescue ::Mongo::ConnectionFailure => exception
+          retries +=1
+          raise exception if retries > max_retries
+          sleep 0.5
+          retry
         end
       end
 
@@ -271,10 +304,16 @@ module DataMapper
       #
       # @api semipublic
       def connection
-        @connection ||= ::Mongo::Connection.new(@options[:host],
-                                                @options[:port],
-                                                :slave_ok => true,
-                                                :logger => DataMapper.logger )
+        options = Ext::Hash.except(@options,:host,:seeds,:port,:database,:user,:password).
+          merge(:logger => DataMapper.logger)
+
+        @connection ||= begin
+          if @options.key? :seeds
+            ::Mongo::ReplSetConnection.new(@options[:seeds], options)
+          else
+            ::Mongo::Connection.new(@options[:host], @options[:port], options)
+          end
+        end
       end
     end # Adapter
   end # Mongo
