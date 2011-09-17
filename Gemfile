@@ -5,7 +5,7 @@ source 'http://rubygems.org'
 SOURCE        = ENV.fetch('SOURCE', :git).to_sym
 REPO_POSTFIX  = SOURCE == :path ? ''                                : '.git'
 DATAMAPPER    = SOURCE == :path ? Pathname(__FILE__).dirname.parent : 'http://github.com/datamapper'
-DM_VERSION    = '~> 1.1.1'
+DM_VERSION    = '~> 1.2.0.rc1'
 MONGO_VERSION = '~> 1.3.1'
 
 group :runtime do
