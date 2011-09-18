@@ -29,9 +29,9 @@ describe DataMapper::Mongo::Adapter,'#connection' do
   end
 
   context 'when seeds are in options' do
-    let(:options) { { :seeds => [['example.net',27017]] } }
+    let(:options) { { :seeds => [['a.example.net',27017],['b.example.net']] } }
     let(:expected_class) { Mongo::ReplSetConnection }
-    let(:expected_arguments) { [[['example.net',27017]]] }
+    let(:expected_arguments) { [['a.example.net',27017],['b.example.net',27017]] }
 
     it_should_behave_like 'a mongo connection setup'
   end
