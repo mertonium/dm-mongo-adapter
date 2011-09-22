@@ -12,11 +12,6 @@ module DataMapper::Mongo::Spec
         model = models.pop
         name = model.name
 
-        if model.respond_to?(:storage_name)
-          db = DataMapper::Mongo::Spec.database(model.repository.name)
-          db.drop_collection(model.storage_name)
-        end
-
         DataMapper::Model.descendants.delete(model)
 
         if name && Object.const_defined?(name)
