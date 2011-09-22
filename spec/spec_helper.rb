@@ -4,6 +4,8 @@ require 'spec'
 MONGO_SPEC_ROOT = Pathname(__FILE__).dirname.expand_path
 $LOAD_PATH.unshift(MONGO_SPEC_ROOT.parent.join('lib').to_s)
 
+DO_CONNECT = !!ENV['DO_CONNECT']
+
 require 'dm-mongo-adapter'
 
 Pathname.glob((MONGO_SPEC_ROOT + 'lib/**/*.rb').to_s).each { |file| require file }
@@ -26,8 +28,17 @@ end
 
 REPOS.freeze
 
+module ConnectionHelper
+  def with_connection
+    if ENV['DO_CONNECT']
+      yield
+    end
+  end
+end
+
 Spec::Runner.configure do |config|
   config.include(DataMapper::Mongo::Spec::CleanupModels)
+  config.extend(ConnectionHelper)
 
   config.before(:all) do
     models  = DataMapper::Model.descendants.to_a

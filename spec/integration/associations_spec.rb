@@ -1,86 +1,148 @@
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
+require 'spec_helper'
 
-describe DataMapper, 'associations' do
-  before :all do
-    class ::User
-      include DataMapper::Mongo::Resource
+describe "associations" do
+  with_connection do
+    before :all do
+      class ::User
+        include DataMapper::Mongo::Resource
 
-      property :id, ObjectId
-      property :name, String
-      property :age, Integer
+        property :id, ObjectId
+        property :group_id, ForeignObjectId
+        property :name, String
+        property :age, Integer
+      end
+
+      class ::Group
+        include DataMapper::Mongo::Resource
+
+        property :id, ObjectId
+        property :name, String
+      end
+
+      class ::Friend
+        include DataMapper::Mongo::Resource
+
+        property :id, ObjectId
+        property :name, String
+      end
+
+      User.belongs_to :group
+      Group.has Group.n, :users
+      User.has User.n, :friends
     end
 
-    class ::Group
-      include DataMapper::Mongo::Resource
-
-      property :id, ObjectId
-      property :name, String
+    before :each do
+      $db.drop_collection('users')
+      $db.drop_collection('groups')
     end
 
-    User.belongs_to :group
-    Group.has Group.n, :users
-    DataMapper.finalize
-  end
+    describe "belongs_to" do
+      before do
+        @john = User.create(:name => 'john', :age => 101)
+        @jane = User.create(:name => 'jane', :age => 102)
 
-  describe 'User model' do
-    it 'should have an group_id property' do
-      User.properties[:group_id].should be_kind_of(DataMapper::Mongo::Property::ForeignObjectId)
-    end
-  end
+        @group = Group.create(:name => 'dm hackers')
+      end
 
-  describe '.belongs_to' do
-    let!(:john) { User.create(:name => 'john', :age => 101) }
-    let!(:jane) { User.create(:name => 'jane', :age => 102) }
-    let!(:group) { Group.create(:name => 'dm hackers') }
+      it "should set parent object _id in the db ref" do
+        lambda {
+          @john.group = @group
+          @john.save
+        }.should_not raise_error
 
-    it 'should set parent object id as the foreign object id' do
-      john.update(:group => group)
-      john.group_id.should == group.id
-    end
+        @john.group_id.should eql(@group.id)
+      end
 
-    it 'should fetch parent object' do
-      user = User.create(:name => 'jane')
-      user.group_id = group.id
-      user.group.should == group
-    end
+      it "should fetch parent object" do
+        user = User.create(:name => 'jane')
+        user.group_id = @group.id
+        user.group.should eql(@group)
+      end
 
-    it 'should work with SEL' do
-      users = User.all(:name => /john|jane/)
+      it "should work with SEL" do
+        users = User.all(:name => /john|jane/)
 
-      users.each { |u| u.update(:group_id => group.id) }
+        users.each { |u| u.update(:group_id => @group.id) }
 
-      users.each do |user|
-        user.group.should_not be_nil
+        users.each do |user|
+          user.group.should_not be_nil
+        end
       end
     end
-  end
 
-  describe 'has many' do
-    let!(:john) { User.create(:name => 'john', :age => 101) }
-    let!(:jane) { User.create(:name => 'jane', :age => 102) }
-    let!(:group) { Group.create(:name => 'dm hackers', :users => [john,jane]) }
+    describe "has many" do
+###    before :each do
+###      @john = User.create(:name => 'john', :age => 101)
+###      @jane = User.create(:name => 'jane', :age => 102)
+###
+###      @group = Group.create(:name => 'dm hackers')
+###
+###      [@john, @jane].each { |user| user.update(:group_id => @group.id) }
+###    end
 
-    it 'should get children' do
-      group.users.size.should == 2
+      # @done
+      it "should get children" do
+        pending "bug in edge dm-core causes an infinite loop here" do
+          @group.users.size.should eql(2)
+        end
+      end
+
+      it "should add new children with <<" do
+        pending "bug in edge dm-core causes an infinite loop here" do
+          user = User.new(:name => 'kyle')
+          @group.users << user
+          user.group_id.should eql(@group.id)
+          @group.users.size.should eql(3)
+        end
+      end
+
+      # @done
+      it "should replace children" do
+        pending "bug in edge dm-core causes an infinite loop here" do
+          user = User.create(:name => 'stan')
+          @group.users = [user]
+          @group.users.size.should eql(1)
+          @group.users.first.should eql(user)
+        end
+      end
+
+      it "should fetch children matching conditions" do
+        pending "bug in edge dm-core causes an infinite loop here" do
+          users = @group.users.all(:name => 'john')
+          users.size.should eql(1)
+        end
+      end
     end
 
-    it 'should add new children with <<' do
-      user = User.new(:name => 'kyle')
-      group.users << user
-      user.group_id.should == group.id
-      group.users.size.should == 3
-    end
+    describe "nested saves" do
+      before :each do
+        #@friend1 = Friend.new
+        #@friend2 = Friend.new
+        @user1 = User.new
+        @user2 = User.new
+        @group = Group.new(:users =>
+            [
+            {:friends =>
+                [{:name => "blah"}, {:name => "blah2"}]
+            },
+            {:friends =>
+                [{:name => "blah3"},{:name => "blah4"}]
+            }])
+      end
 
-    it 'should replace children' do
-      user = User.create(:name => 'stan')
-      group.users = [user]
-      group.users.size.should == 1
-      group.users.first.should == user
-    end
+      # @done
+      it "should save nested objects" do
 
-    it 'should fetch children matching conditions' do
-      users = group.users.all(:name => 'john')
-      users.size.should == 1
+        #@group.users << @user1
+        #@group.users << @user2
+        @group.save
+        Group.get(@group.id).users.all.each do |u|
+          u.group_id.should == @group.id
+          u.friends.each do |f|
+            f.user_id.should == u.id
+          end
+        end
+      end
     end
   end
 end
