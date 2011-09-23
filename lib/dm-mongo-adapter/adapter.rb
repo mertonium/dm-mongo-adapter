@@ -109,6 +109,26 @@ module DataMapper
         end.size
       end
 
+      # Returns the Mongo::Connection instance for this process
+      #
+      # @todo If the process has been forked.
+      #
+      # @return [Mongo::Connection|Mongo::ReplSetConnection]
+      #
+      # @api public
+      def connection
+        options = Ext::Hash.except(@options,:host,:seeds,:port,:database,:user,:password).
+          merge(:logger => DataMapper.logger)
+
+        @connection ||= begin
+          if @options.key? :seeds
+            ::Mongo::ReplSetConnection.new(*@options[:seeds], options)
+          else
+            ::Mongo::Connection.new(@options[:host], @options[:port], options)
+          end
+        end
+      end
+
       private
 
       def initialize(name, options = {})
@@ -295,25 +315,6 @@ module DataMapper
         @database
       end
 
-      # Returns the Mongo::Connection instance for this process
-      #
-      # @todo If the process has been forked.
-      #
-      # @return [Mongo::Connection|Mongo::ReplSetConnection]
-      #
-      # @api semipublic
-      def connection
-        options = Ext::Hash.except(@options,:host,:seeds,:port,:database,:user,:password).
-          merge(:logger => DataMapper.logger)
-
-        @connection ||= begin
-          if @options.key? :seeds
-            ::Mongo::ReplSetConnection.new(*@options[:seeds], options)
-          else
-            ::Mongo::Connection.new(@options[:host], @options[:port], options)
-          end
-        end
-      end
     end # Adapter
   end # Mongo
 
