@@ -1,12 +1,12 @@
 require 'pathname'
 require 'spec'
+require 'dm-core'
+require 'dm-mongo-adapter'
 
 MONGO_SPEC_ROOT = Pathname(__FILE__).dirname.expand_path
 $LOAD_PATH.unshift(MONGO_SPEC_ROOT.parent.join('lib').to_s)
 
 DO_CONNECT = !!ENV['DO_CONNECT']
-
-require 'dm-mongo-adapter'
 
 Pathname.glob((MONGO_SPEC_ROOT + 'lib/**/*.rb').to_s).each { |file| require file }
 Pathname.glob((MONGO_SPEC_ROOT + '**/shared/**/*.rb').to_s).each { |file| require file }
@@ -14,24 +14,27 @@ Pathname.glob((MONGO_SPEC_ROOT + '**/shared/**/*.rb').to_s).each { |file| requir
 # Define the repositories used by the specs. Override the defaults by
 # supplying ENV['DEFAULT_SPEC_URI'] or ENV['AUTH_SPEC_URI'].
 
-REPOS = {
-  'default' => 'mongo://localhost/dm-mongo-test',
-  'auth'    => 'mongo://dmm-auth:dmm-password@localhost/dm-mongo-test-auth'
-}
-
-REPOS.each do |name, default|
-  connection_string = ENV["#{name.upcase}_SPEC_URI"] || default
-
-  DataMapper.setup(name.to_sym, connection_string)
-  REPOS[name] = connection_string  # ensure *_SPEC_URI is saved
-end
-
-REPOS.freeze
-
 module ConnectionHelper
+  def setup_connection
+    uri = if ENV['TRAVIS_CI']
+      'mongo://localhost:27017'
+    elsif ENV['MONGO_URL']
+      ENV['MONGO_URL']
+    else
+      raise 'Not running on travis ci and no MONGO_URL in env, cannot setup connection'
+    end
+    DataMapper.setup :default,uri
+  end
+
+  def teardown_connection
+    DataMapper.repository(:default).adapter.connection.close
+  end
+
   def with_connection
-    if ENV['DO_CONNECT']
+    if ENV['MONGO_URL'] or ENV['TRAVIS_CI']
+      setup_connection
       yield
+      teardown_connection
     end
   end
 end
