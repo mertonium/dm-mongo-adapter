@@ -71,46 +71,37 @@ describe 'associations' do
     end
 
     describe 'has many' do
-###    before :each do
-###      @john = User.create_or_raise(:name => 'john', :age => 101)
-###      @jane = User.create_or_raise(:name => 'jane', :age => 102)
-###
-###      @group = Group.create_or_raise(:name => 'dm hackers')
-###
-###      [@john, @jane].each { |user| user.update(:group_id => @group.id) }
-###    end
+       before :each do
+         @john = User.create_or_raise(:name => 'john', :age => 101)
+         @jane = User.create_or_raise(:name => 'jane', :age => 102)
+   
+         @group = Group.create_or_raise(:name => 'dm hackers')
+   
+         [@john, @jane].each { |user| user.update(:group_id => @group.id) }
+       end
 
-      # @done
       it 'should get children' do
-        pending 'bug in edge dm-core causes an infinite loop here' do
-          @group.users.size.should eql(2)
-        end
+        @group.users.size.should eql(2)
       end
 
       it 'should add new children with <<' do
-        pending 'bug in edge dm-core causes an infinite loop here' do
-          user = User.new(:name => 'kyle')
-          @group.users << user
-          user.group_id.should eql(@group.id)
-          @group.users.size.should eql(3)
-        end
+        user = User.new(:name => 'kyle')
+        @group.users << user
+        user.group_id.should eql(@group.id)
+        @group.users.size.should eql(3)
       end
 
       # @done
       it 'should replace children' do
-        pending 'bug in edge dm-core causes an infinite loop here' do
-          user = User.create_or_raise(:name => 'stan')
-          @group.users = [user]
-          @group.users.size.should eql(1)
-          @group.users.first.should eql(user)
-        end
+        user = User.create_or_raise(:name => 'stan')
+        @group.users = [user]
+        @group.users.size.should eql(1)
+        @group.users.first.should eql(user)
       end
 
       it 'should fetch children matching conditions' do
-        pending 'bug in edge dm-core causes an infinite loop here' do
-          users = @group.users.all(:name => 'john')
-          users.size.should eql(1)
-        end
+        users = @group.users.all(:name => 'john')
+        users.size.should eql(1)
       end
     end
 
