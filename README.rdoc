@@ -1,5 +1,7 @@
 = DataMapper MongoDB Adapter
 
+{<img src="http://travis-ci.org/mbj/dm-mongo-adapter.png?branch=master" />}[http://travis-ci.org/mbj/dm-mongo-adapter]
+
 == Status
 
 The adapter is going through a major re-work as DataMapper will soon support EmbeddedValue (see: http://wiki.github.com/datamapper/dm-core/roadmap)
