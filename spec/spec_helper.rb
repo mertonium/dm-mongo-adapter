@@ -26,7 +26,7 @@ end
 
 module ConnectionHelper
   def setup_connection
-    uri = if ENV['TRAVIS_CI']
+    uri = if ENV['TRAVIS']
       'mongo://localhost:27017'
     elsif ENV['MONGO_URL']
       ENV['MONGO_URL']
