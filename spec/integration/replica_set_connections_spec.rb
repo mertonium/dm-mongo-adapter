@@ -6,7 +6,7 @@ describe 'replica set connections' do
       DataMapper.setup(
         :default,
         :adapter => 'mongo',
-        :seeds => replica_set,
+        :seeds => replica_set
       )
       connection = DataMapper.repository(:default).adapter.send(:connection)
       connection.should be_kind_of(Mongo::ReplSetConnection)
