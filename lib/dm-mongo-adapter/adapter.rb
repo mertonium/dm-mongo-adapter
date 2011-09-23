@@ -122,7 +122,8 @@ module DataMapper
 
         @connection ||= begin
           if @options.key? :seeds
-            ::Mongo::ReplSetConnection.new(*@options[:seeds], options)
+            args = @options[:seeds] << options
+            ::Mongo::ReplSetConnection.new *args
           else
             ::Mongo::Connection.new(@options[:host], @options[:port], options)
           end
