@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe DataMapper::Mongo::Property::ObjectId do
-  let(:model)     { Class.new include { DataMapper::Mongo::Resource } }
+  let(:model)     { Class.new { include DataMapper::Mongo::Resource } }
   let(:property)  { model.property(:id, DataMapper::Mongo::Property::ObjectId) }
 
   it_should_behave_like 'an ObjectId type'
