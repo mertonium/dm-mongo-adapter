@@ -2,6 +2,7 @@ require 'pathname'
 require 'spec'
 require 'dm-core'
 require 'dm-mongo-adapter'
+require 'dm-annoing-modificators'
 
 MONGO_SPEC_ROOT = Pathname(__FILE__).dirname.expand_path
 $LOAD_PATH.unshift(MONGO_SPEC_ROOT.parent.join('lib').to_s)
@@ -13,6 +14,15 @@ Pathname.glob((MONGO_SPEC_ROOT + '**/shared/**/*.rb').to_s).each { |file| requir
 
 # Define the repositories used by the specs. Override the defaults by
 # supplying ENV['DEFAULT_SPEC_URI'] or ENV['AUTH_SPEC_URI'].
+
+module ResetHelper
+  def reset_db
+    DataMapper.repository.adapter.send(:database).collections.each do |collection|
+      next if collection.name =~ /^system/
+      collection.drop
+    end
+  end
+end
 
 module ConnectionHelper
   def setup_connection
@@ -27,21 +37,30 @@ module ConnectionHelper
   end
 
   def teardown_connection
-    DataMapper.repository(:default).adapter.connection.close
+    #DataMapper.repository(:default).adapter.connection.close
+    #DataMapper::Repository.adapters.delete :default
   end
+end
 
+module ConnectionManagement
   def with_connection
     if ENV['MONGO_URL'] or ENV['TRAVIS_CI']
-      setup_connection
+      before :all do
+        setup_connection
+      end
       yield
-      teardown_connection
+      after :all do
+        teardown_connection
+      end
     end
   end
 end
 
 Spec::Runner.configure do |config|
   config.include(DataMapper::Mongo::Spec::CleanupModels)
-  config.extend(ConnectionHelper)
+  config.include(ResetHelper)
+  config.include(ConnectionHelper)
+  config.extend(ConnectionManagement)
 
   config.before(:all) do
     models  = DataMapper::Model.descendants.to_a

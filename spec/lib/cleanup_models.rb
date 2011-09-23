@@ -14,7 +14,7 @@ module DataMapper::Mongo::Spec
 
         DataMapper::Model.descendants.delete(model)
 
-        if name && Object.const_defined?(name)
+        if name && !name.length.zero? && Object.const_defined?(name)
           Object.send(:remove_const, name)
         end
 

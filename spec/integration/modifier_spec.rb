@@ -11,16 +11,20 @@ describe DataMapper::Mongo::Resource do
         property :body, Text
       end
    
-      Post.all.destroy!
+      DataMapper.finalize
+    end
+
+    before :each do
+      reset_db
     end
    
     describe "#increment" do
-      before :all do
-        @post = Post.create(:comment_count => 1)
+      before :each do
+        @post = Post.create_or_raise(:comment_count => 1)
       end
    
       context "with 2 args" do
-        before :all do
+        before :each do
           @post.increment(:comment_count, 2)
         end
    
@@ -35,7 +39,7 @@ describe DataMapper::Mongo::Resource do
       end
    
       context "with 1 arg" do
-        before :all do
+        before :each do
           @post.increment(:comment_count)
         end
         it "should update the given property with the incremented by one" do
@@ -50,12 +54,12 @@ describe DataMapper::Mongo::Resource do
     end
    
     describe "#decrement" do
-      before :all do
-        @post = Post.create(:comment_count => 10)
+      before :each do
+        @post = Post.create_or_raise(:comment_count => 10)
       end
    
       context "with 2 args" do
-        before :all do
+        before :each do
           @post.decrement(:comment_count, 5)
         end
    
@@ -70,7 +74,7 @@ describe DataMapper::Mongo::Resource do
       end
    
       context "with 1 args" do
-        before :all do
+        before :each do
           @post.decrement(:comment_count)
         end
    
@@ -87,7 +91,7 @@ describe DataMapper::Mongo::Resource do
    
     describe "#set" do
       it "should set the value of a property" do
-        post = Post.create(:body => "This needs to be edited", :comment_count => 2)
+        post = Post.create_or_raise(:body => "This needs to be edited", :comment_count => 2)
    
         post.set(:body => "This was edited", :comment_count => 3)
         post.body.should == "This was edited"
@@ -100,7 +104,7 @@ describe DataMapper::Mongo::Resource do
    
     describe "#unset" do
       it "should unset the value of a property" do
-        post = Post.create(:body => "This needs to be removed", :comment_count => 2)
+        post = Post.create_or_raise(:body => "This needs to be removed", :comment_count => 2)
    
         post.unset(:body, :comment_count)
         post.body.should be_nil

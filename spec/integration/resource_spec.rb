@@ -12,6 +12,11 @@ describe DataMapper::Mongo::Resource do
         property  :metadata,  Hash
         property  :created_at, DateTime
       end
+      DataMapper.finalize
+    end
+
+    before :each do
+      reset_db
     end
 
     #
@@ -25,12 +30,11 @@ describe DataMapper::Mongo::Resource do
         end
 
         it 'should return an empty collection when there are no resources' do
-          User.all.destroy!
           User.all.should be_empty
         end
 
         it 'should return all resources' do
-          expected = [User.create(:name => 'One'), User.create(:name => 'Two')]
+          expected = [User.create_or_raise(:name => 'One'), User.create_or_raise(:name => 'Two')]
           User.all.should == expected
         end
 
@@ -47,14 +51,13 @@ describe DataMapper::Mongo::Resource do
         end
 
         it 'should return an empty collection when there are no matching resources' do
-          User.all.destroy!
-          User.create(:name => 'One')
+          User.create_or_raise(:name => 'One')
           User.all(:name => 'Two').should be_empty
         end
 
         it 'should return the specific resources' do
-          User.create(:name => 'One')
-          expected = User.create(:name => 'Two')
+          User.create_or_raise(:name => 'One')
+          expected = User.create_or_raise(:name => 'Two')
           User.all(:name => 'Two').should == [expected]
         end
       end
@@ -65,10 +68,9 @@ describe DataMapper::Mongo::Resource do
     #
 
     describe '#first' do
-      before(:all) do
-        User.all.destroy!
-        @user_one = User.create(:name => 'Three')
-        @user_two = User.create(:name => 'Four')
+      before :each do
+        @user_one = User.create_or_raise(:name => 'Three')
+        @user_two = User.create_or_raise(:name => 'Four')
       end
 
       describe 'with no query' do
@@ -116,7 +118,7 @@ describe DataMapper::Mongo::Resource do
       end
 
       it 'should persist nil' do
-        user = User.create(:tags => nil)
+        user = User.create_or_raise(:tags => nil)
         User.get(user.id).tags.should be_nil
       end
 
@@ -126,12 +128,12 @@ describe DataMapper::Mongo::Resource do
       end
 
       it 'should persist an Array' do
-        user = User.create(:tags => ['loud', 'troll'])
+        user = User.create_or_raise(:tags => ['loud', 'troll'])
         User.get(user.id).tags.should ==['loud', 'troll']
       end
 
       it 'should persist nested properties in an Array' do
-        user = User.create(:tags => ['troll', ['system', 'banned']])
+        user = User.create_or_raise(:tags => ['troll', ['system', 'banned']])
         User.get(user.id).tags.should == ['troll', ['system', 'banned']]
       end
     end
@@ -147,7 +149,7 @@ describe DataMapper::Mongo::Resource do
       end
 
       it 'should persist nil' do
-        user = User.create(:metadata => nil)
+        user = User.create_or_raise(:metadata => nil)
         User.get(user.id).metadata.should be_nil
       end
 
@@ -157,7 +159,7 @@ describe DataMapper::Mongo::Resource do
       end
 
       it 'should persist a Hash' do
-        user = User.create(:metadata => { :one => 'two' })
+        user = User.create_or_raise(:metadata => { :one => 'two' })
         User.get(user.id).metadata.should == { :one => 'two' }
       end
 
@@ -167,12 +169,12 @@ describe DataMapper::Mongo::Resource do
       end
 
       it 'should persist Hash-like Arrays' do
-        user = User.create(:metadata => [:one, 'two'])
+        user = User.create_or_raise(:metadata => [:one, 'two'])
         User.get(user.id).metadata.should == { :one => 'two' }
       end
 
       it 'should persist nested properties in an Array' do
-        user = User.create(:metadata => { :one => { :two => :three } })
+        user = User.create_or_raise(:metadata => { :one => { :two => :three } })
         pending "EmbeddedHash doesn't typecast nested keys yet" do
           User.get(user.id).metadata.should == { :one => { :two => :three } }
         end

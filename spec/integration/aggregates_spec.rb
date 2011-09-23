@@ -11,9 +11,12 @@ describe DataMapper::Mongo::Model do
         property  :school, String
         property  :score,  Float
       end
-   
-      Student.all.destroy!
-   
+
+      DataMapper.finalize
+    end
+
+    before do
+      reset_db
       @student_one   = Student.create(:school => 'School 1', :name => 'One',   :score => 3.0)
       @student_two   = Student.create(:school => 'School 2', :name => 'Two',   :score => 3.5)
       @student_three = Student.create(:school => 'School 2', :name => 'Three', :score => 4.5)

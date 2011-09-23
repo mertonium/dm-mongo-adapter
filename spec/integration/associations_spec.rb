@@ -29,19 +29,19 @@ describe "associations" do
       User.belongs_to :group
       Group.has Group.n, :users
       User.has User.n, :friends
+      DataMapper.finalize
     end
 
     before :each do
-      $db.drop_collection('users')
-      $db.drop_collection('groups')
+      reset_db
     end
 
     describe "belongs_to" do
       before do
-        @john = User.create(:name => 'john', :age => 101)
-        @jane = User.create(:name => 'jane', :age => 102)
+        @john = User.create_or_raise(:name => 'john', :age => 101)
+        @jane = User.create_or_raise(:name => 'jane', :age => 102)
 
-        @group = Group.create(:name => 'dm hackers')
+        @group = Group.create_or_raise(:name => 'dm hackers')
       end
 
       it "should set parent object _id in the db ref" do
@@ -54,7 +54,7 @@ describe "associations" do
       end
 
       it "should fetch parent object" do
-        user = User.create(:name => 'jane')
+        user = User.create_or_raise(:name => 'jane')
         user.group_id = @group.id
         user.group.should eql(@group)
       end
@@ -72,10 +72,10 @@ describe "associations" do
 
     describe "has many" do
 ###    before :each do
-###      @john = User.create(:name => 'john', :age => 101)
-###      @jane = User.create(:name => 'jane', :age => 102)
+###      @john = User.create_or_raise(:name => 'john', :age => 101)
+###      @jane = User.create_or_raise(:name => 'jane', :age => 102)
 ###
-###      @group = Group.create(:name => 'dm hackers')
+###      @group = Group.create_or_raise(:name => 'dm hackers')
 ###
 ###      [@john, @jane].each { |user| user.update(:group_id => @group.id) }
 ###    end
@@ -99,7 +99,7 @@ describe "associations" do
       # @done
       it "should replace children" do
         pending "bug in edge dm-core causes an infinite loop here" do
-          user = User.create(:name => 'stan')
+          user = User.create_or_raise(:name => 'stan')
           @group.users = [user]
           @group.users.size.should eql(1)
           @group.users.first.should eql(user)

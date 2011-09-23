@@ -1,7 +1,10 @@
 require 'spec_helper'
 
-describe "Property" do
+describe 'Property' do
   with_connection do
+    let :database do
+      DataMapper.repository(:default).adapter.send(:database)
+    end
     before :all do
       ENV['TZ'] = 'UTC'
    
@@ -13,22 +16,24 @@ describe "Property" do
         property :date_field, Date
         property :type, Discriminator
       end
+
+      DataMapper.finalize
     end
    
-    describe "Class" do
-      it "should be typecasted to a string" do
+    describe 'Class' do
+      it 'should be typecasted to a string' do
         lambda{
           user = User.create!(:type => User)
         }.should_not raise_error
       end
     end
    
-    describe "DateTime" do
-      it "should be typecasted from a Time object" do
+    describe 'DateTime' do
+      it 'should be typecasted from a Time object' do
         dt_now = DateTime.now
         t_now  = Time.now
    
-        _id = $db.collection('users').insert(:type => 'User', :date_time_field => t_now)
+        _id = database.collection('users').insert(:type => 'User', :date_time_field => t_now)
    
         user = User.get(_id)
    
@@ -38,11 +43,11 @@ describe "Property" do
       end
     end
    
-    describe "Date" do
-      it "should be typecasted from a Time object" do
+    describe 'Date' do
+      it 'should be typecasted from a Time object' do
         today = Date.today
    
-        _id = $db.collection('users').insert(:type => 'User', :date_field => Time.parse(today.to_s))
+        _id = database.collection('users').insert(:type => 'User', :date_field => Time.parse(today.to_s))
    
         user = User.get(_id)
    

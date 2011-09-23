@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "Single Table Inheritance" do
   with_connection do
-    before(:all) do
+    before :all do
       class ::Person
         include DataMapper::Mongo::Resource
    
@@ -15,30 +15,32 @@ describe "Single Table Inheritance" do
       class ::Male < Person; end
       class ::Father < Male; end
       class ::Son < Male; end
+
+      DataMapper.finalize
     end
    
-    before(:each) do
-      $db.drop_collection('people')
+    before :each do
+      reset_db
     end
    
     it "should have a type property that reflects the class" do
       [Person, Male, Father, Son].each_with_index do |model, i|
-        object = model.create!(:name => "#{model} #{i}")
+        object = model.create_or_raise(:name => "#{model} #{i}")
         object.type.should == model
       end
     end
    
     it "should parent should return an instance of the child when type is explicitly specified" do
       [Person, Male, Father, Son].each_with_index do |model, i|
-        object = model.create!(:name => "#{model} #{i}")
+        object = model.create_or_raise(:name => "#{model} #{i}")
         object.reload
         object.should be_instance_of(model)
       end
     end
    
     it "should discriminate types during reads" do
-      father1 = Father.create!(:name => '1')
-      father2 = Father.create!(:name => '2')
+      father1 = Father.create_or_raise(:name => '1')
+      father2 = Father.create_or_raise(:name => '2')
    
       fathers = Father.all
    
