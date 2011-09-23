@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "associations" do
+describe 'associations' do
   with_connection do
     before :all do
       class ::User
@@ -36,7 +36,7 @@ describe "associations" do
       reset_db
     end
 
-    describe "belongs_to" do
+    describe 'belongs_to' do
       before do
         @john = User.create_or_raise(:name => 'john', :age => 101)
         @jane = User.create_or_raise(:name => 'jane', :age => 102)
@@ -44,7 +44,7 @@ describe "associations" do
         @group = Group.create_or_raise(:name => 'dm hackers')
       end
 
-      it "should set parent object _id in the db ref" do
+      it 'should set parent object _id in the db ref' do
         lambda {
           @john.group = @group
           @john.save
@@ -53,13 +53,13 @@ describe "associations" do
         @john.group_id.should eql(@group.id)
       end
 
-      it "should fetch parent object" do
+      it 'should fetch parent object' do
         user = User.create_or_raise(:name => 'jane')
         user.group_id = @group.id
         user.group.should eql(@group)
       end
 
-      it "should work with SEL" do
+      it 'should work with SEL' do
         users = User.all(:name => /john|jane/)
 
         users.each { |u| u.update(:group_id => @group.id) }
@@ -70,7 +70,7 @@ describe "associations" do
       end
     end
 
-    describe "has many" do
+    describe 'has many' do
 ###    before :each do
 ###      @john = User.create_or_raise(:name => 'john', :age => 101)
 ###      @jane = User.create_or_raise(:name => 'jane', :age => 102)
@@ -81,14 +81,14 @@ describe "associations" do
 ###    end
 
       # @done
-      it "should get children" do
-        pending "bug in edge dm-core causes an infinite loop here" do
+      it 'should get children' do
+        pending 'bug in edge dm-core causes an infinite loop here' do
           @group.users.size.should eql(2)
         end
       end
 
-      it "should add new children with <<" do
-        pending "bug in edge dm-core causes an infinite loop here" do
+      it 'should add new children with <<' do
+        pending 'bug in edge dm-core causes an infinite loop here' do
           user = User.new(:name => 'kyle')
           @group.users << user
           user.group_id.should eql(@group.id)
@@ -97,8 +97,8 @@ describe "associations" do
       end
 
       # @done
-      it "should replace children" do
-        pending "bug in edge dm-core causes an infinite loop here" do
+      it 'should replace children' do
+        pending 'bug in edge dm-core causes an infinite loop here' do
           user = User.create_or_raise(:name => 'stan')
           @group.users = [user]
           @group.users.size.should eql(1)
@@ -106,15 +106,15 @@ describe "associations" do
         end
       end
 
-      it "should fetch children matching conditions" do
-        pending "bug in edge dm-core causes an infinite loop here" do
+      it 'should fetch children matching conditions' do
+        pending 'bug in edge dm-core causes an infinite loop here' do
           users = @group.users.all(:name => 'john')
           users.size.should eql(1)
         end
       end
     end
 
-    describe "nested saves" do
+    describe 'nested saves' do
       before :each do
         #@friend1 = Friend.new
         #@friend2 = Friend.new
@@ -123,15 +123,15 @@ describe "associations" do
         @group = Group.new(:users =>
             [
             {:friends =>
-                [{:name => "blah"}, {:name => "blah2"}]
+                [{:name => 'blah'}, {:name => 'blah2'}]
             },
             {:friends =>
-                [{:name => "blah3"},{:name => "blah4"}]
+                [{:name => 'blah3'},{:name => 'blah4'}]
             }])
       end
 
       # @done
-      it "should save nested objects" do
+      it 'should save nested objects' do
 
         #@group.users << @user1
         #@group.users << @user2

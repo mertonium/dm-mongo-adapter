@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Single Table Inheritance" do
+describe 'Single Table Inheritance' do
   with_connection do
     before :all do
       class ::Person
@@ -23,14 +23,14 @@ describe "Single Table Inheritance" do
       reset_db
     end
    
-    it "should have a type property that reflects the class" do
+    it 'should have a type property that reflects the class' do
       [Person, Male, Father, Son].each_with_index do |model, i|
         object = model.create_or_raise(:name => "#{model} #{i}")
         object.type.should == model
       end
     end
    
-    it "should parent should return an instance of the child when type is explicitly specified" do
+    it 'should parent should return an instance of the child when type is explicitly specified' do
       [Person, Male, Father, Son].each_with_index do |model, i|
         object = model.create_or_raise(:name => "#{model} #{i}")
         object.reload
@@ -38,7 +38,7 @@ describe "Single Table Inheritance" do
       end
     end
    
-    it "should discriminate types during reads" do
+    it 'should discriminate types during reads' do
       father1 = Father.create_or_raise(:name => '1')
       father2 = Father.create_or_raise(:name => '2')
    

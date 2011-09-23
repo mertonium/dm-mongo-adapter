@@ -175,7 +175,7 @@ describe DataMapper::Mongo::Resource do
 
       it 'should persist nested properties in an Array' do
         user = User.create_or_raise(:metadata => { :one => { :two => :three } })
-        pending "EmbeddedHash doesn't typecast nested keys yet" do
+        pending %s(EmbeddedHash doesn't typecast nested keys yet) do
           User.get(user.id).metadata.should == { :one => { :two => :three } }
         end
       end

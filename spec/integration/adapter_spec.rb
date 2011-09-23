@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe DataMapper::Mongo::Adapter do
   describe '#connection' do
-    it "needs integration spec" do
+    it 'needs integration spec' do
       pending
     end
   end
  #if DO_CONNECT
- #  describe "#connection" do
+ #  describe '#connection' do
  #    let(:adapter) { DataMapper::Mongo::Adapter.new(REPOS['default']) }
  #    subject { adapter.send(:connection) }
  #    it { should be_a ::Mongo::Connection }

@@ -22,7 +22,7 @@ describe DataMapper::Mongo::Model do
       @student_three = Student.create(:school => 'School 2', :name => 'Three', :score => 4.5)
     end
    
-    describe "#count" do
+    describe '#count' do
       describe 'with no query' do
         it 'should return number of all resources' do
           Student.count.should == 3
@@ -36,33 +36,33 @@ describe DataMapper::Mongo::Model do
       end
     end
    
-    describe "#aggregate" do
-      describe "without operators" do
-        describe "without conditions" do
-          it "should return array of hashes based on all records" do
+    describe '#aggregate' do
+      describe 'without operators' do
+        describe 'without conditions' do
+          it 'should return array of hashes based on all records' do
             result = Student.aggregate(:school, :score).to_a
    
             result.should == [
-              { :school => "School 1", :score => 3.0 },
-              { :school => "School 2", :score => 3.5 },
-              { :school => "School 2", :score => 4.5 }]
+              { :school => 'School 1', :score => 3.0 },
+              { :school => 'School 2', :score => 3.5 },
+              { :school => 'School 2', :score => 4.5 }]
           end
         end
    
-        describe "with conditions" do
-          it "should return array of hashes based on records that match conditions" do
+        describe 'with conditions' do
+          it 'should return array of hashes based on records that match conditions' do
             result = Student.aggregate(:school, :score, :score.gt => 3.0)
    
             result.should == [
-              { :school => "School 2", :score => 3.5 },
-              { :school => "School 2", :score => 4.5 }]
+              { :school => 'School 2', :score => 3.5 },
+              { :school => 'School 2', :score => 4.5 }]
           end
         end
       end
    
-      describe "count operator" do
-        describe "without conditions" do
-          it "should get correct results based on all records" do
+      describe 'count operator' do
+        describe 'without conditions' do
+          it 'should get correct results based on all records' do
             result = Student.aggregate(:school, :score.count)
    
             result.size.should == 2
@@ -77,8 +77,8 @@ describe DataMapper::Mongo::Model do
           end
         end
    
-        describe "with conditions" do
-          it "should get correct results based on records that match conditions" do
+        describe 'with conditions' do
+          it 'should get correct results based on records that match conditions' do
             result = Student.aggregate(:school, :score.count, :name => /two|three/i)
    
             result.size.should == 1
@@ -93,7 +93,7 @@ describe DataMapper::Mongo::Model do
       #
       # TODO: add spec for #avg with conditions
    
-      describe "avg operator" do
+      describe 'avg operator' do
         describe 'without conditions' do
           it 'should return an avarage value of the given field' do
             result = Student.aggregate(:school, :score.avg)
@@ -114,7 +114,7 @@ describe DataMapper::Mongo::Model do
       #
       # TODO: add spec for #min with conditions
    
-      describe "min operator" do
+      describe 'min operator' do
         describe 'without conditions' do
           it 'should return the minimum value of the given field' do
             result = Student.aggregate(:school, :score.min)
@@ -135,7 +135,7 @@ describe DataMapper::Mongo::Model do
       #
       # TODO: add spec for #max with conditions
    
-      describe "max operator" do
+      describe 'max operator' do
         describe 'without conditions' do
           it 'should return the maximum value of the given field' do
             result = Student.aggregate(:school, :score.max)
@@ -156,7 +156,7 @@ describe DataMapper::Mongo::Model do
       #
       # TODO: add spec for #sum with conditions
    
-      describe "sum operator" do
+      describe 'sum operator' do
         describe 'without conditions' do
           it 'should return the maximum value of the given field' do
             result = Student.aggregate(:school, :score.sum)
