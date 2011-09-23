@@ -47,7 +47,7 @@ module ReplicaSetHelper
       }
     JSON
 
-    mongod_wait port_a
+    mongod_wait :a
 
     Kernel.system *%W(mongo localhost:#{port_a} --eval #{"rs.initiate(#{config});"})
 
