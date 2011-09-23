@@ -20,6 +20,8 @@ module DataMapper::Mongo::Spec
       command << { :err => :out,:out => [dbpath + 'stdout.log','w'] }
       mongod_pids[name] = spawn command
       mongod_ports[name] = port
+      sleep 0.5
+      $stderr.puts "mongod #{name.inspect} at port #{port} started"
     end
 
     def mongod_active?(name = :default)
@@ -42,7 +44,8 @@ module DataMapper::Mongo::Spec
     def mongod_stop(name = :default)
       Process.kill 'INT', mongod_pids.fetch(name) { raise "Running mongod instance with name #{name.inspect} was not found" }
       mongod_pids.delete name
-      mongod_ports.delete name
+      port = mongod_ports.delete name
+      $stderr.puts "mongod #{name.inspect} at port #{port} stopped"
     end
 
     def mongod_pids

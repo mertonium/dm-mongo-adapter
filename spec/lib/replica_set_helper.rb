@@ -1,15 +1,11 @@
 module DataMapper::Mongo::Spec
   module ReplicaSetHelper
-    def wait_for_primary(port)
+    def wait_for_primary(name,port)
       loop do
-        begin
-          connection = Mongo::Connection.new 'localhost',port
-          return if connection.primary?
-          puts "mongodb is not primary yet waiting a second"
-          connection.close
-        rescue Mongo::ConnectionFailure
-          $stderr.puts "mongodb not ready yet, waiting a second"
-        end
+        connection = Mongo::Connection.new 'localhost',port
+        return if connection.primary?
+        connection.close
+        $stderr.puts "mongod #{name.inspect} is not primary yet waiting a second"
         sleep 1
       end
     end
@@ -52,7 +48,7 @@ module DataMapper::Mongo::Spec
    
       Kernel.system *%W(mongo localhost:#{port_a} --eval #{"rs.initiate(#{config});"})
    
-      wait_for_primary port_a
+      wait_for_primary :a,port_a
    
       [
         ['localhost',port_a],
