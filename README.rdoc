@@ -98,6 +98,7 @@ Contributors:
 
 * Anthony Williams (antw)
 * Lance Carlson (lancecarlson)
+* Markus Schirp (mbj)
 
 == Note on Patches/Pull Requests
 
