@@ -1,4 +1,17 @@
 module ReplicaSetHelper
+  def spawn(*arguments)
+    if Process.respond_to? :spawn
+      Process.spawn *arguments
+    else
+      if arguments.last.kind_of? Hash
+        opts = arguments.pop
+      end
+      fork do |child|
+        Kernel.exec *arguments
+      end
+    end
+  end
+
   def wait_for_connection(port)
     loop do
       begin
@@ -56,9 +69,9 @@ module ReplicaSetHelper
     arguments_b = ['mongod'] + options + %W(--dbpath #{dbdir_b} --port #{port_b}) << { :err => :out,:out => [dbdir_b + 'stdout.log','w'] }
     arguments_c = ['mongod'] + options + %W(--dbpath #{dbdir_c} --port #{port_c}) << { :err => :out,:out => [dbdir_c + 'stdout.log','w'] }
 
-    @pid_a = Process.spawn *arguments_a
-    @pid_b = Process.spawn *arguments_b
-    @pid_c = Process.spawn *arguments_c
+    @pid_a = spawn *arguments_a
+    @pid_b = spawn *arguments_b
+    @pid_c = spawn *arguments_c
 
 
     config = <<-JSON
