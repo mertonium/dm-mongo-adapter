@@ -2,9 +2,13 @@ require 'spec_helper'
 
 describe DataMapper::Mongo::Model do
   # FIXME: Why described_class is nil here? 
-  let(:object) { Class.new.extend DataMapper::Mongo::Model }
+  let(:object) do 
+    Class.new do
+      extend DataMapper::Mongo::Model 
+    end
+  end
 
-  subject { object.send :const_missing, name }
+  subject { object.class_eval "#{name}" }
 
   context 'when name exists in mongo property namespace' do 
     let(:name) { 'ObjectId' }

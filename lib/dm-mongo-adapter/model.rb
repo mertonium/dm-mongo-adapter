@@ -7,7 +7,7 @@ module DataMapper
 
       # @api private
       def const_missing(name)
-        if name == 'Serial'
+        if name == :Serial
           DataMapper::Mongo::Property::ObjectId
         elsif DataMapper::Mongo::Property.const_defined?(name)
           DataMapper::Mongo::Property.const_get(name)
