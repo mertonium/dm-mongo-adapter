@@ -6,6 +6,8 @@ module DataMapper::Mongo::Spec
         fd.reopen File.open *value
       when IO
         fd.reopen value
+      when '/dev/null'
+        fd.reopen File.open value
       end
     end
 
@@ -24,7 +26,7 @@ module DataMapper::Mongo::Spec
             when :err
               process_fd($stderr,value)
             end
-          end
+          end if opts
           Kernel.exec *arguments
         end
       end
