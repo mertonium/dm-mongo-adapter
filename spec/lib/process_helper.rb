@@ -1,5 +1,14 @@
 module DataMapper::Mongo::Spec
   module ProcessHelper
+    def process_fd(fd,value)
+      case value
+      when Array
+        fd.reopen File.open *value
+      when IO
+        fd.reopen value
+      end
+    end
+
     def spawn(arguments)
       if Process.respond_to? :spawn
         Process.spawn *arguments
@@ -8,7 +17,14 @@ module DataMapper::Mongo::Spec
           opts = arguments.pop
         end
         fork do |child,pid|
-          p arguments
+          opts.each do |key,value|
+            case key
+            when :out
+              process_fd($stdout,value)
+            when :err
+              process_fd($stderr,value)
+            end
+          end
           Kernel.exec *arguments
         end
       end
