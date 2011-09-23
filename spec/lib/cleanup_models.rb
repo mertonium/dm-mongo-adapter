@@ -5,8 +5,6 @@ module DataMapper::Mongo::Spec
     # removing the model classes from the descendants list, and then
     # undefining the constants.
     #
-    # @todo Only used once; try to remove.
-    #
     def cleanup_models(*models)
       unless models.empty?
         model = models.pop

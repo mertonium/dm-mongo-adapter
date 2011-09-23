@@ -16,20 +16,15 @@ Pathname.glob((MONGO_SPEC_ROOT + '**/shared/**/*.rb').to_s).each { |file| requir
 
 Spec::Runner.configure do |config|
   config.include DataMapper::Mongo::Spec::CleanupModels
-  config.include ResetHelper
-  config.include ProcessHelper
-  config.include ConnectionHelper
-  config.include ReplicaSetHelper
-  config.include MongodHelper
-  config.extend ConnectionManagement
-  config.extend ReplicaSetManagement
+  config.include DataMapper::Mongo::Spec::ResetHelper
+  config.include DataMapper::Mongo::Spec::ProcessHelper
+  config.include DataMapper::Mongo::Spec::ConnectionHelper
+  config.include DataMapper::Mongo::Spec::ReplicaSetHelper
+  config.include DataMapper::Mongo::Spec::MongodHelper
+  config.extend  DataMapper::Mongo::Spec::ConnectionManagement
+  config.extend  DataMapper::Mongo::Spec::ReplicaSetManagement
 
-  config.before(:all) do
-    models  = DataMapper::Model.descendants.to_a
-    cleanup_models(*models)
-  end
-
-  config.after :suite do
-    teardown_connection
+  config.before :all do
+    cleanup_models *DataMapper::Model.descendants.to_a
   end
 end

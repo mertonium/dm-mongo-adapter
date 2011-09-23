@@ -15,7 +15,7 @@ describe 'replica set connections' do
     end
 
     after do
-      teardown_connection :replica_set_connection
+      teardown_connection repo_name
     end
   end
 end
