@@ -130,7 +130,23 @@ module DataMapper
         end
       end
 
-      private
+      # Closes the active connection if any
+      #
+      # This method is mostly used from specs. But you can force a 
+      # connection close from your code if needed.
+      #
+      # This method is a noop when no connection exists. 
+      # Connections are established on demand. 
+      # 
+      # @return nil
+      #
+      # @api public
+      def close_connection
+        @connection and @connection.close
+        @connection = nil
+      end
+
+    private
 
       def initialize(name, options = {})
         # When giving a repository URI rather than a hash, the database name

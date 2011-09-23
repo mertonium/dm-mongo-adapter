@@ -37,8 +37,8 @@ module ConnectionHelper
   end
 
   def teardown_connection
-    #DataMapper.repository(:default).adapter.connection.close
-    #DataMapper::Repository.adapters.delete :default
+    DataMapper.repository(:default).adapter.close_connection
+    DataMapper::Repository.adapters.delete :default
   end
 end
 
