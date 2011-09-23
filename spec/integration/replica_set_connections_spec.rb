@@ -5,7 +5,7 @@ describe 'replica set connections' do
     DataMapper.setup(
       :default,
       :adapter => 'mongo',
-      :hosts => [['a.example.net',27017],['b.example.net']],
+      :hosts => [['a.example.net',27017],['b.example.net',27017]],
       :database => 'test-database',
       :user => 'testuser',
       :password => 'testpasswd'
