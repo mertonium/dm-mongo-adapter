@@ -28,4 +28,8 @@ Spec::Runner.configure do |config|
     models  = DataMapper::Model.descendants.to_a
     cleanup_models(*models)
   end
+
+  config.after :suite do
+    teardown_connection
+  end
 end

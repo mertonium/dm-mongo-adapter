@@ -17,7 +17,7 @@ module DataMapper
         attribute_set(property, attribute_get(property) + value)
 
         if modifier(:inc, property => value)
-          self.persistance_state.original_attributes.clear
+          self.persistence_state.original_attributes.clear
         end
       end
 
