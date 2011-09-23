@@ -1,15 +1,15 @@
 require 'spec_helper'
 
 describe 'replica set connections' do
-  it 'should not fail with hash' do
-    DataMapper.setup(
-      :default,
-      :adapter => 'mongo',
-      :hosts => [['a.example.net',27017],['b.example.net',27017]],
-      :database => 'test-database',
-      :user => 'testuser',
-      :password => 'testpasswd'
-    )
-    DataMapper.repository(:default).adapter.send(:connection)
+  with_running_replica_set do
+    it 'should connect the replica set' do
+      DataMapper.setup(
+        :default,
+        :adapter => 'mongo',
+        :seeds => replica_set,
+      )
+      connection = DataMapper.repository(:default).adapter.send(:connection)
+      connection.should be_kind_of(Mongo::ReplSetConnection)
+    end
   end
 end
