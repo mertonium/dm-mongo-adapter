@@ -19,9 +19,9 @@ module ReplicaSetHelper
     port_c = 27119
   #--replSet dm-mongo-adapter 
   #
-    mongod_start :a,%W(--port #{port_a} --replSet dm-mongo-adapter)
-    mongod_start :b,%W(--port #{port_b} --replSet dm-mongo-adapter)
-    mongod_start :c,%W(--port #{port_c} --replSet dm-mongo-adapter)
+    mongod_start :a,port_a,%W(--replSet dm-mongo-adapter)
+    mongod_start :b,port_b,%W(--replSet dm-mongo-adapter)
+    mongod_start :c,port_c,%W(--replSet dm-mongo-adapter)
 
     config = <<-JSON
       {
