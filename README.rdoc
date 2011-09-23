@@ -78,7 +78,7 @@ Ruby gems
 
 == DataMapper plugins
 
-Currently the adapter works with:
+Currently the adapter is known to work with:
 
 1. dm-timestamps
 2. dm-validations
@@ -86,6 +86,7 @@ Currently the adapter works with:
 4. dm-pager
 5. dm-serializer
 6. dm-types
+6. dm-is-tree
 
 and expect more of course :)
 
