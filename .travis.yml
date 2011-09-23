@@ -5,3 +5,4 @@ branches:
 notifications:
   email:
     - mbj@seonic.net
+script: bundle exec spec spec
