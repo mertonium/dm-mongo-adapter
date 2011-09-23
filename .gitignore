@@ -10,3 +10,5 @@ script/dumps
 .bundle
 Gemfile.lock
 Gemfile.local
+.rbx
+tmp
