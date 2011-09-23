@@ -28,6 +28,7 @@ group :datamapper do
 end
 
 group :development do
+  gem 'dm-annoing-modificators', :git => 'git://github.com/mbj/dm-annoing-modificators'
   gem 'jeweler',       '~> 1.5.2'
   gem 'rake',          '~> 0.8.7'
   gem 'rspec',         '~> 1.3.1'
