@@ -13,10 +13,6 @@ group :runtime do
   # MongoDB driver
   gem 'bson_ext', MONGO_VERSION, :platforms => [ :mri ]
   gem 'mongo',    MONGO_VERSION
-end
-
-group :datamapper do
-
   gem 'dm-core', DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-core#{REPO_POSTFIX}", :branch => 'release-1.2'
 
   plugins = ENV['PLUGINS'] || ENV['PLUGIN']

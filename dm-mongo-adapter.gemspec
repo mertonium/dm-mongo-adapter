@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{Piotr Solnica}]
-  s.date = %q{2011-09-22}
+  s.date = %q{2011-09-24}
   s.email = %q{piotr.solnica@gmail.com}
   s.executables = [%q{console}]
   s.extra_rdoc_files = [
@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
     "TODO"
   ]
   s.files = [
+    ".travis.yml",
     "Gemfile",
     "LICENSE",
     "README.rdoc",
@@ -46,31 +47,36 @@ Gem::Specification.new do |s|
     "lib/dm-mongo-adapter/support/date_time.rb",
     "lib/dm-mongo-adapter/support/object.rb",
     "script/performance.rb",
+    "spec/integration/adapter_spec.rb",
+    "spec/integration/aggregates_spec.rb",
     "spec/integration/associations_spec.rb",
-    "spec/legacy/README",
-    "spec/legacy/adapter_shared_spec.rb",
-    "spec/legacy/adapter_spec.rb",
-    "spec/legacy/associations_spec.rb",
-    "spec/legacy/property_spec.rb",
-    "spec/legacy/spec_helper.rb",
-    "spec/legacy/sti_spec.rb",
+    "spec/integration/model_spec.rb",
+    "spec/integration/modifier_spec.rb",
+    "spec/integration/properties/foreign_object_id_spec.rb",
+    "spec/integration/properties/object_id_spec.rb",
+    "spec/integration/property_spec.rb",
+    "spec/integration/replica_set_connections_spec.rb",
+    "spec/integration/resource_spec.rb",
+    "spec/integration/sti_spec.rb",
     "spec/lib/cleanup_models.rb",
-    "spec/lib/raw_connections.rb",
-    "spec/public/aggregates_spec.rb",
-    "spec/public/model_spec.rb",
-    "spec/public/modifier_spec.rb",
-    "spec/public/properties/foreign_object_id_spec.rb",
-    "spec/public/properties/object_id_spec.rb",
-    "spec/public/resource_spec.rb",
-    "spec/public/shared/object_id_shared_spec.rb",
+    "spec/lib/connection_helper.rb",
+    "spec/lib/connection_management.rb",
+    "spec/lib/mongod_helper.rb",
+    "spec/lib/process_helper.rb",
+    "spec/lib/replica_set_helper.rb",
+    "spec/lib/replica_set_management.rb",
+    "spec/lib/reset_helper.rb",
     "spec/rcov.opts",
-    "spec/semipublic/adapter_spec.rb",
+    "spec/shared/object_id_type.rb",
     "spec/spec.opts",
     "spec/spec_helper.rb",
     "spec/unit/date_time/class_methods/to_mongo_spec.rb",
+    "spec/unit/dm-mongo-adapter/adapter/class_methods/new_spec.rb",
+    "spec/unit/dm-mongo-adapter/adapter/close_connection_spec.rb",
+    "spec/unit/dm-mongo-adapter/adapter/connection_spec.rb",
+    "spec/unit/dm-mongo-adapter/model/const_missing_spec.rb",
     "spec/unit/dm-mongo-adapter/property/foreign_object_id_spec.rb",
     "spec/unit/dm-mongo-adapter/property/object_id_spec.rb",
-    "spec/unit/dm-mongo-adapter/shared/object_id_type.rb",
     "tasks/spec.rake",
     "tasks/yard.rake",
     "tasks/yardstick.rake"
@@ -84,21 +90,33 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<bson_ext>, ["~> 1.3.1"])
-      s.add_runtime_dependency(%q<mongo>, ["~> 1.3.1"])
+      s.add_runtime_dependency(%q<bson_ext>, ["~> 1.4.0"])
+      s.add_runtime_dependency(%q<mongo>, ["~> 1.4.0"])
+      s.add_runtime_dependency(%q<dm-core>, ["~> 1.2.0.rc2"])
+      s.add_runtime_dependency(%q<dm-migrations>, ["~> 1.2.0.rc2"])
+      s.add_runtime_dependency(%q<dm-aggregates>, ["~> 1.2.0.rc2"])
+      s.add_development_dependency(%q<dm-annoing-modificators>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_development_dependency(%q<rake>, ["~> 0.8.7"])
       s.add_development_dependency(%q<rspec>, ["~> 1.3.1"])
     else
-      s.add_dependency(%q<bson_ext>, ["~> 1.3.1"])
-      s.add_dependency(%q<mongo>, ["~> 1.3.1"])
+      s.add_dependency(%q<bson_ext>, ["~> 1.4.0"])
+      s.add_dependency(%q<mongo>, ["~> 1.4.0"])
+      s.add_dependency(%q<dm-core>, ["~> 1.2.0.rc2"])
+      s.add_dependency(%q<dm-migrations>, ["~> 1.2.0.rc2"])
+      s.add_dependency(%q<dm-aggregates>, ["~> 1.2.0.rc2"])
+      s.add_dependency(%q<dm-annoing-modificators>, [">= 0"])
       s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_dependency(%q<rake>, ["~> 0.8.7"])
       s.add_dependency(%q<rspec>, ["~> 1.3.1"])
     end
   else
-    s.add_dependency(%q<bson_ext>, ["~> 1.3.1"])
-    s.add_dependency(%q<mongo>, ["~> 1.3.1"])
+    s.add_dependency(%q<bson_ext>, ["~> 1.4.0"])
+    s.add_dependency(%q<mongo>, ["~> 1.4.0"])
+    s.add_dependency(%q<dm-core>, ["~> 1.2.0.rc2"])
+    s.add_dependency(%q<dm-migrations>, ["~> 1.2.0.rc2"])
+    s.add_dependency(%q<dm-aggregates>, ["~> 1.2.0.rc2"])
+    s.add_dependency(%q<dm-annoing-modificators>, [">= 0"])
     s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
     s.add_dependency(%q<rake>, ["~> 0.8.7"])
     s.add_dependency(%q<rspec>, ["~> 1.3.1"])
