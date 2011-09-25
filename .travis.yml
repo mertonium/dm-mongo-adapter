@@ -5,6 +5,7 @@ rvm:
 branches:
   only:
     - master
+    - feature/atomic-operations
 notifications:
   email:
     - mbj@seonic.net
