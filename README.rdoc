@@ -23,9 +23,10 @@ Useful links:
 
 Ruby gems
 
-* dm-core ~> 1.1.0
-* dm-aggregates ~> 1.1.0
-* mongo ~> 1.2.4
+* dm-core ~> 1.2.0.rc2
+* dm-aggregates ~> 1.2.0.rc2
+* dm-migrations ~> 1.2.0.rc2
+* mongo ~> 1.4.0
 
 == Install
 
