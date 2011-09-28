@@ -27,6 +27,7 @@ Ruby gems
 * dm-aggregates ~> 1.2.0.rc2
 * dm-migrations ~> 1.2.0.rc2
 * mongo ~> 1.4.0
+* mongodb ~> 2.0.0 (This gem is only tested against this version)
 
 == Install
 
