@@ -25,7 +25,7 @@ end
 
 group :development do
   gem 'dm-annoing-modificators', :git => 'git://github.com/mbj/dm-annoing-modificators'
-  gem 'jeweler',       '~> 1.5.2'
+  gem 'jeweler',       '~> 1.6.0'
   gem 'rake',          '~> 0.8.7'
   gem 'rspec',         '~> 1.3.1'
 end
