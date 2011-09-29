@@ -3,6 +3,7 @@ require 'mongo'
 require 'dm-core'
 require 'dm-aggregates'
 
+require 'dm-mongo-adapter/version'
 require 'dm-mongo-adapter/query'
 require 'dm-mongo-adapter/query/java_script'
 
