@@ -2,6 +2,8 @@ require 'pathname'
 
 source 'http://rubygems.org'
 
+gemspec
+
 SOURCE        = ENV.fetch('SOURCE', :git).to_sym
 REPO_POSTFIX  = SOURCE == :path ? ''                                : '.git'
 DATAMAPPER    = SOURCE == :path ? Pathname(__FILE__).dirname.parent : 'http://github.com/datamapper'
@@ -25,9 +27,6 @@ end
 
 group :development do
   gem 'dm-annoing-modificators', :git => 'git://github.com/mbj/dm-annoing-modificators'
-  gem 'jeweler',       '~> 1.5.2'
-  gem 'rake',          '~> 0.8.7'
-  gem 'rspec',         '~> 1.3.1'
 end
 
 platforms :mri_18 do
@@ -37,4 +36,3 @@ platforms :mri_18 do
     gem 'yardstick', '~> 0.2'
   end
 end
-
