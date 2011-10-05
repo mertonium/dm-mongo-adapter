@@ -15,6 +15,8 @@ module DataMapper::Mongo::Spec
         'mongo://localhost:27017/test'
       elsif ENV['MONGO_URL']
         ENV['MONGO_URL']
+      elsif RUBY_PLATFORM == 'java'
+        raise 'Automatic mongodb management is not possible under jruby pls provide a MONGO_URL env variable'
       else
         mongod_start name
         mongod_wait name
