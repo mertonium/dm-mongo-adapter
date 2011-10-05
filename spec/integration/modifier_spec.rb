@@ -1,4 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
+require 'spec_helper'
 
 describe DataMapper::Mongo::Resource do
   with_connection do
