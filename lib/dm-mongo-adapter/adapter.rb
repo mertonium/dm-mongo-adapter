@@ -132,8 +132,8 @@ module DataMapper
 
       # Closes the active connection if any
       #
-      # This method is mostly used from specs. But you can force a 
-      # connection close from your code if needed.
+      # This method should be called when your process does a fork to unshare 
+      # your mongo connection.
       #
       # This method is a noop when no connection exists. 
       # Connections are established on demand. 
