@@ -6,7 +6,7 @@ module DataMapper
       #
       # The ObjectId is made available via your model as a String.
       #
-      # It does not implement mogos DBRef Convention.
+      # It does not implement the mongodb DBRef convention.
       # @see http://www.mongodb.org/display/DOCS/Database+References
       #
       # @api public
@@ -15,7 +15,7 @@ module DataMapper
         dump_as ::BSON::ObjectId
         coercion_method :to_bson_object_id
         required false
-      end # DBRef
+      end # ForeignObjectId
     end # Property
   end # Mongo
 end # DataMapper
