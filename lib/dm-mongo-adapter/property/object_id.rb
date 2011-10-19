@@ -15,12 +15,13 @@ module DataMapper
       #
       # @api public
       class ObjectId < DataMapper::Property::Object
-        include BsonObjectId
         load_as ::BSON::ObjectId
         dump_as ::BSON::ObjectId
+
         key true
         field '_id'
         required false
+        coercion_method :to_bson_object_id
 
         # @api private
         def to_child_key

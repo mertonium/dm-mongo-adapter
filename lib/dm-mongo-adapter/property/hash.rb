@@ -5,13 +5,8 @@ module DataMapper
         load_as ::Hash
         dump_as ::Hash
 
-        # @api semipublic
-        def load(value)
-          typecast_to_primitive(value)
-        end
-
-        # @api semipublic
-        def typecast_to_primitive(value)
+        # FIXME: Replace with Virtus::Coercion::Array.to_hash ?
+        def typecast(value)
           case value
           when NilClass
             nil

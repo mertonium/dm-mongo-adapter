@@ -11,9 +11,9 @@ module DataMapper
       #
       # @api public
       class ForeignObjectId < DataMapper::Property::Object
-        include BsonObjectId
         load_as ::BSON::ObjectId
         dump_as ::BSON::ObjectId
+        coercion_method :to_bson_object_id
         required false
       end # DBRef
     end # Property
