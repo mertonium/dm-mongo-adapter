@@ -16,7 +16,8 @@ module DataMapper
       # @api public
       class ObjectId < DataMapper::Property::Object
         include BsonObjectId
-        primitive ::BSON::ObjectId
+        load_as ::BSON::ObjectId
+        dump_as ::BSON::ObjectId
         key true
         field '_id'
         required false

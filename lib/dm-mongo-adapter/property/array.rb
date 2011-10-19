@@ -2,8 +2,8 @@ module DataMapper
   module Mongo
     module Property
       class Array < DataMapper::Property::Object
-        include DataMapper::Property::PassThroughLoadDump
-        primitive ::Array
+        load_as ::Array
+        dump_as ::Array
       end
     end # Property
   end # Mongo

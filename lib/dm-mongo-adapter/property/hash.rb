@@ -2,8 +2,8 @@ module DataMapper
   module Mongo
     module Property
       class Hash < DataMapper::Property::Object
-        include DataMapper::Property::PassThroughLoadDump
-        primitive ::Hash
+        load_as ::Hash
+        dump_as ::Hash
 
         # @api semipublic
         def load(value)

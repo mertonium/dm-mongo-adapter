@@ -12,7 +12,8 @@ module DataMapper
       # @api public
       class ForeignObjectId < DataMapper::Property::Object
         include BsonObjectId
-        primitive ::BSON::ObjectId
+        load_as ::BSON::ObjectId
+        dump_as ::BSON::ObjectId
         required false
       end # DBRef
     end # Property

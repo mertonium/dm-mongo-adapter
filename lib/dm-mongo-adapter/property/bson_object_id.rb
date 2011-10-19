@@ -3,8 +3,6 @@ module DataMapper
     module Property
       # Shared behaviour for all properties using BSON::ObjectId as primitive.
       module BsonObjectId
-        include DataMapper::Property::PassThroughLoadDump
-     
         # Returns the ObjectId as a string
         #
         # @return [String]
