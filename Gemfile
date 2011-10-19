@@ -15,13 +15,13 @@ group :runtime do
   # MongoDB driver
   gem 'bson_ext', MONGO_VERSION, :platforms => [ :mri ]
   gem 'mongo',    MONGO_VERSION
-  gem 'dm-core', DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-core#{REPO_POSTFIX}", :branch => 'release-1.2'
+  gem 'dm-core', DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-core#{REPO_POSTFIX}", :tag => 'v1.2.0'
 
   plugins = ENV['PLUGINS'] || ENV['PLUGIN']
   plugins = plugins.to_s.tr(',', ' ').split.push('dm-migrations').push('dm-aggregates').uniq
 
   plugins.each do |plugin|
-    gem plugin, DM_VERSION, SOURCE => "#{DATAMAPPER}/#{plugin}#{REPO_POSTFIX}", :branch => 'release-1.2'
+    gem plugin, DM_VERSION, SOURCE => "#{DATAMAPPER}/#{plugin}#{REPO_POSTFIX}", :tag => 'v1.2.0'
   end
 end
 
