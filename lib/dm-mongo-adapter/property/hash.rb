@@ -11,9 +11,9 @@ module DataMapper
           when NilClass
             nil
           when ::Hash
-            DataMapper::Ext::Hash.to_mash(value).symbolize_keys
+            value
           when ::Array
-            value.empty? ? {} : {value.first.to_sym => value.last}
+            value.empty? ? {} : {value.first => value.last}
           end
         end
       end #Array

@@ -160,7 +160,7 @@ describe DataMapper::Mongo::Resource do
 
       it 'should persist a Hash' do
         user = User.create_or_raise(:metadata => { :one => 'two' })
-        User.get(user.id).metadata.should == { :one => 'two' }
+        User.get(user.id).metadata.should == { 'one' => 'two' }
       end
 
       it 'should permit Hash-like Arrays' do
@@ -170,7 +170,7 @@ describe DataMapper::Mongo::Resource do
 
       it 'should persist Hash-like Arrays' do
         user = User.create_or_raise(:metadata => [:one, 'two'])
-        User.get(user.id).metadata.should == { :one => 'two' }
+        User.get(user.id).metadata.should == { 'one' => 'two' }
       end
 
       it 'should persist nested properties in an Array' do
