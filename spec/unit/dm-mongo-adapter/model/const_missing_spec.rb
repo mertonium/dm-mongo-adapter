@@ -25,12 +25,4 @@ describe DataMapper::Mongo::Model do
       should == String
     end
   end
-
-  context 'when name is "Serial"' do
-    let(:name) { 'Serial' }
-
-    it 'should return ObjectId for compatibillity' do
-      should == DataMapper::Mongo::Property::ObjectId
-    end
-  end
 end
