@@ -1,4 +1,18 @@
 shared_examples_for 'an ObjectId type' do
+  describe '#valid?' do
+    subject { property.valid?(value) }
+
+    context 'with a BSON::ObjectId' do
+      let(:value) { BSON::ObjectId.new }
+      it { should be_true }
+    end
+
+    context 'with nil' do
+      let(:value) { nil }
+      it { should be_true }
+    end
+  end
+
   describe '#typecast' do
     subject { property.typecast(value) }
 
