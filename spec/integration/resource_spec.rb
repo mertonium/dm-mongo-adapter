@@ -6,11 +6,12 @@ describe DataMapper::Mongo::Resource do
       class ::User
         include DataMapper::Mongo::Resource
 
-        property  :id,        ObjectId
-        property  :name,      String
-        property  :tags,      Array
-        property  :metadata,  Hash
+        property  :id,         ObjectId
+        property  :name,       String
+        property  :tags,       Array
+        property  :metadata,   Hash
         property  :created_at, DateTime
+        property  :other_id,   ForeignObjectId
       end
       DataMapper.finalize
     end
@@ -104,6 +105,46 @@ describe DataMapper::Mongo::Resource do
         it 'should return true' do
           User.new(:name => 'Mongo').should be_dirty
         end
+      end
+    end
+
+    #
+    # ForeignObjectId properties
+    #
+
+    describe 'ForeignId properties' do
+      it 'should permit nil' do
+        user = User.new(:other_id => nil)
+        user.other_id.should be_nil
+      end
+
+      it 'should persist nil' do
+        user = User.create_or_raise(:other_id => nil)
+        User.get(user.id).other_id.should be_nil
+      end
+      
+      it 'should permit BSON::ObjectId' do
+        object_id = BSON::ObjectId.new
+        user = User.new(:other_id => object_id)
+        user.other_id.should == object_id
+      end
+
+      it 'should persist BSON::ObjectId' do
+        object_id = BSON::ObjectId.new
+        user = User.create_or_raise(:other_id => object_id)
+        User.get(user.id).other_id.should == object_id
+      end
+
+      it 'should permit BSON::ObjectId strings' do
+        object_id = BSON::ObjectId.new
+        user = User.new(:other_id => object_id.to_s)
+        user.other_id.should == object_id
+      end
+
+      it 'should persist BSON::ObjectId strings' do
+        object_id = BSON::ObjectId.new
+        user = User.create_or_raise(:other_id => object_id.to_s)
+        User.get(user.id).other_id.should == object_id
       end
     end
 
