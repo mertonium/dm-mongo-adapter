@@ -21,7 +21,7 @@ module DataMapper
       def create(resources)
         resources.map do |resource|
           with_collection(resource.model) do |collection|
-            resource.model.key.set(resource, [collection.insert(attributes_as_fields(resource))])
+            resource.model.key.set(resource, [collection.insert(resource_to_attributes(resource))])
           end
         end.size
       end
@@ -47,10 +47,10 @@ module DataMapper
       # Updates one or many existing resources
       #
       # @example
-      #   adapter.update(attributes, collection)  # => 1
+      #   adapter.update(dirty_attributes, collection)  # => 1
       #
-      # @param [Hash(Property => Object)] attributes
-      #   Hash of attribute values to set, keyed by Property
+      # @param [Hash(Property => Object)] dirty_attributes
+      #   Hash of dirty_attribute values to set, keyed by Property
       # @param [Collection] resources
       #   Collection of records to be updated
       #
@@ -58,11 +58,15 @@ module DataMapper
       #   The number of records updated
       #
       # @api semipublic
-      def update(attributes, resources)
+      def update(dirty_attributes, resources)
         with_collection(resources.query.model) do |collection|
           resources.each do |resource|
-            collection.update(key(resource),
-              attributes_as_fields(resource).merge(attributes_as_fields(attributes)))
+            attributes = {}
+            dirty_attributes.each do |property, value|
+              attributes[property.field] = dump_field_value(value)
+            end
+
+            collection.update(key(resource), resource_to_attributes(resource).merge(attributes))
           end.size
         end
       end
@@ -211,39 +215,16 @@ module DataMapper
       #   Mongo library.
       #
       # @api private
-      def attributes_as_fields(record)
-        attributes = case record
-          when DataMapper::Resource
-            attributes_from_resource(record)
-          when Hash
-            attributes_from_properties_hash(record)
-          end
-
-        attributes.delete('_id') unless attributes.nil?
-
-        attributes
-      end
-
-      # TODO: document
-      def attributes_from_resource(record)
+      def resource_to_attributes(resource)
         attributes = {}
 
-        model = record.model
+        model = resource.model
 
         model.properties.each do |property|
-          attributes[property.field] = dump_field_value(property.dump(property.get(record)))
+          attributes[property.field] = dump_field_value(property.dump(property.get(resource)))
         end
 
-        attributes
-      end
-
-      # TODO: document
-      def attributes_from_properties_hash(record)
-        attributes = {}
-
-        record.each do |key, value|
-          attributes[key.field] = dump_field_value(key.dump(value))
-        end
+        attributes.delete('_id') unless attributes.nil?
 
         attributes
       end
