@@ -39,13 +39,7 @@ module DataMapper
       def count
         setup_conditions_and_options
 
-        # TODO: atm ruby driver doesn't support count with statements,
-        #        that's why we use find and size here as a tmp workaround
-        if @statements.keys.empty?
-          [@collection.count]
-        else
-          [find.size]
-        end
+        [@collection.count({:query => @statements}.merge(@options))]
       end
 
       # TODO: document
