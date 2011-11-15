@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
 
   s.authors  = ['Piotr Solnica']
   s.email    = 'piotr.solnica@gmail.com'
-  s.date     = '2011-09-29'
+  s.date     = '2011-11-15'
   s.summary  = 'MongoDB DataMapper Adapter'
   s.homepage = 'http://github.com/solnic/dm-mongo-adapter'
 
