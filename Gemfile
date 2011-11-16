@@ -8,7 +8,7 @@ SOURCE        = ENV.fetch('SOURCE', :git).to_sym
 REPO_POSTFIX  = SOURCE == :path ? ''                                : '.git'
 DATAMAPPER    = SOURCE == :path ? Pathname(__FILE__).dirname.parent : 'http://github.com/datamapper'
 DM_VERSION    = '~> 1.2.0.rc2'
-MONGO_VERSION = '~> 1.4.1'
+MONGO_VERSION = '~> 1.4.0'
 
 group :runtime do
 
