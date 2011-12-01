@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.rubygems_version = '1.8.10'
 
-  s.add_runtime_dependency(%q<mongo>,         ['~> 1.5.0'])
+  s.add_runtime_dependency(%q<mongo>,         ['~> 1.5.1'])
   s.add_runtime_dependency(%q<dm-core>,       ['~> 1.3.0.beta'])
   s.add_runtime_dependency(%q<dm-migrations>, ['~> 1.3.0.beta'])
   s.add_runtime_dependency(%q<dm-aggregates>, ['~> 1.3.0.beta'])
