@@ -18,11 +18,11 @@ module DataMapper::Mongo::Spec
       elsif RUBY_PLATFORM == 'java'
         raise 'Automatic mongodb management is not possible under jruby pls provide a MONGO_URL env variable'
       else
-        mongod_start name
-        mongod_wait name
+        mongod_start(name)
+        mongod_wait(name)
         'mongo://localhost:27017/test'
       end
-      DataMapper.setup name,uri
+      DataMapper.setup(name,uri)
     end
    
     def teardown_connection(name = :default)
@@ -36,8 +36,15 @@ module DataMapper::Mongo::Spec
    
     def teardown_connections
       DataMapper::Repository.adapters.keys.each do |name|
-        teardown_connection name
+        teardown_connection(name)
       end
+    end
+
+    def with_connection
+      before :all do
+        ensure_connection 
+      end
+      yield
     end
   end
 end

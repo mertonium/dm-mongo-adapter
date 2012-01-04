@@ -12,26 +12,26 @@ module DataMapper::Mongo::Spec
 
     def mongod_start(name = :default,port = 27017,options = [])
       dbpath = MONGO_SPEC_ROOT + '..' + 'tmp' + name.to_s
-      FileUtils.rm_rf dbpath
-      FileUtils.mkdir_p dbpath
+      FileUtils.rm_rf(dbpath)
+      FileUtils.mkdir_p(dbpath)
       command = %W(mongod --dbpath #{dbpath} --port #{port})
-      command.concat MONGOD_MINIMAL_IMPACT_OPTS
-      command.concat options
+      command.concat(MONGOD_MINIMAL_IMPACT_OPTS)
+      command.concat(options)
       command << { :err => :out,:out => [dbpath + 'stdout.log','w'] }
-      mongod_pids[name] = spawn command
+      mongod_pids[name] = spawn(command)
       mongod_ports[name] = port
-      sleep 0.5
       $stderr.puts "mongod #{name.inspect} at port #{port} started"
     end
 
     def mongod_active?(name = :default)
-      mongod_pids.key? name
+      mongod_pids.key?(name)
     end
 
     def mongod_wait(name = :default)
       loop do
         begin
-          connection = Mongo::Connection.new 'localhost', mongod_ports.fetch(name)
+          connection = 
+            Mongo::Connection.new('localhost', mongod_ports.fetch(name))
           connection.close
           return
         rescue Mongo::ConnectionFailure
@@ -42,9 +42,12 @@ module DataMapper::Mongo::Spec
     end
 
     def mongod_stop(name = :default)
-      Process.kill 'INT', mongod_pids.fetch(name) { raise "Running mongod instance with name #{name.inspect} was not found" }
-      mongod_pids.delete name
-      port = mongod_ports.delete name
+      pid = mongod_pids.fetch(name) do 
+        raise "Running mongod instance with name #{name.inspect} was not found"
+      end
+      Process.kill('INT', pid)
+      mongod_pids.delete(name)
+      port = mongod_ports.delete(name)
       $stderr.puts "mongod #{name.inspect} at port #{port} stopped"
     end
 
