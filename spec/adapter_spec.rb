@@ -13,9 +13,7 @@ describe 'DataMapper::Adapters::MongoAdapter' do
     let(:repository) { DataMapper.repository(:default) }
     let(:adapter)    { DataMapper.repository(repository.adapter) }
 
-    # This is the default Heffalup model. You can replace it with your own 
-    # (using let/let!) # but # be shure the replacement provides the required 
-    # properties.
+    # This is the mongodb specific Heffalup model. 
     let(:heffalump_model) do
       Class.new do
         include DataMapper::Resource
