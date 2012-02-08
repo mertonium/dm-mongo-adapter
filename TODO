@@ -1,5 +1,6 @@
 Add support for:
 
+
 - distinct function: http://www.mongodb.org/display/DOCS/Aggregation
 
 - modifier functions: http://www.mongodb.org/display/DOCS/Updating
@@ -20,7 +21,7 @@ General stuff:
 
 - organize specs in groups (public/semipublic like in dm-core maybe?)
 
-- improve test coverage, especially for embedded resources and handling of custom types
+- improve test coverage, especially for embedded resources and handling of custom types, and aggregates
 
 - update README
 
