@@ -54,7 +54,9 @@ module DataMapper
         @query.fields.each do |field|
           if field.kind_of?(DataMapper::Query::Operator)
             operators << field
-            property_names << field.target.name
+            if field.target != :all
+              property_names << field.target.name
+            end
           else
             keys << field.name
             property_names << field.name

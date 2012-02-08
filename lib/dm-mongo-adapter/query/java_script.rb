@@ -17,7 +17,7 @@ module DataMapper
             end
 
             fields.each do |field|
-              field_name = field.target.name
+              field_name = field.target == :all ? :all : field.target.name
 
               @initial[field_name] = 0
 
@@ -49,7 +49,8 @@ module DataMapper
             @operations = {}
 
             fields.each do |field|
-              @operations[field.target.name] = field.operator
+              field_name = field.target == :all ? :all : field.target.name
+              @operations[field_name] = field.operator
             end
           end
 
