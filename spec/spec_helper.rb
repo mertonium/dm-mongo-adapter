@@ -1,6 +1,5 @@
 require 'pathname'
 require 'spec'
-require 'dm-core'
 require 'dm-mongo-adapter'
 require 'dm-annoing-modificators'
 

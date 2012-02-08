@@ -1,3 +1,13 @@
+# dm-core depends on virtus
+# and virtus needs backports for 1.8
+# Sonce virtus does not pull or load 
+# backports we are doing it here
+#
+p RUBY_VERSION
+if RUBY_VERSION < '1.9.0'
+  require 'backports'
+end
+
 require 'mongo'
 
 require 'dm-core'
